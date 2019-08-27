@@ -4,6 +4,8 @@ project(ceres_catkin)
 find_package(catkin_simple REQUIRED)
 catkin_simple()
 
+find_package(suitesparse REQUIRED)
+
 include_directories(${Eigen_INCLUDE_DIRS})
 
 include(ExternalProject)
@@ -27,14 +29,15 @@ ExternalProject_Add(ceres_src
   GIT_TAG ${CERES_TAG}
   UPDATE_COMMAND ""
   CONFIGURE_COMMAND cmake  
+    -DSUITESPARSE=ON
     -DGFLAGS=ON 
     -DGFLAGS_LIBRARY=${gflags_catkin_LIBRARIES}
     -DGFLAGS_INCLUDE_DIR=${gflags_catkin_INCLUDE_DIR}
     -DGLOG_INCLUDE_DIR=${glog_catkin_INCLUDE_DIR}
     -DGLOG_LIBRARY=${glog_catkin_LIBRARIES}
     -DBUILD_DOCUMENTATION=OFF 
-    -DSUITESPARSE_INCLUDE_DIR_HINTS=${CATKIN_DEVEL_PREFIX}/include/suitesparse 
-    -DSUITESPARSE_LIBRARY_DIR_HINTS=${CATKIN_DEVEL_PREFIX}/lib ../ceres_src	
+    -DSUITESPARSE_INCLUDE_DIR_HINTS=${suitesparse_INCLUDE_DIRS} 
+    -DSUITESPARSE_LIBRARY_DIR_HINTS=${CATKIN_DEVEL_PREFIX}/lib ../ceres_src
     -DBUILD_EXAMPLES=OFF
     -DBUILD_TESTING=OFF
     -DCMAKE_INSTALL_PREFIX=${CATKIN_DEVEL_PREFIX} -DBUILD_SHARED_LIBS=ON
